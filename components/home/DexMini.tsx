@@ -7,15 +7,15 @@ import { PriceChart } from "@/components/trade/PriceChart";
 import { fmtPct, fmtPrice } from "@/lib/format";
 
 export function DexMini() {
-  const candles = usePoll<Candle[]>("/api/candles?market=ETH-USD&g=3600", 60_000);
+  const candles = usePoll<Candle[]>("/api/candles?market=SOL-USD&g=3600", 60_000);
   const tickers = usePoll<Ticker[]>("/api/markets", 15_000);
-  const t = tickers.data?.find((x) => x.id === "ETH-USD");
+  const t = tickers.data?.find((x) => x.id === "SOL-USD");
   const [side, setSide] = useState<"buy" | "sell">("buy");
   return (
     <div className="rounded border border-rule-2 bg-well">
       <div className="flex items-center justify-between border-b border-[#262a30] px-4 py-3.5">
         <div className="flex items-baseline gap-3">
-          <span className="text-[14px] font-semibold">ETH / USD</span>
+          <span className="text-[14px] font-semibold">SOL / USD</span>
           <span className="num text-[14px]">{fmtPrice(t?.last)}</span>
           <span className={`num text-[12px] ${t?.change == null ? "text-muted" : t.change >= 0 ? "text-up" : "text-down"}`}>{fmtPct(t?.change)}</span>
         </div>
@@ -29,7 +29,7 @@ export function DexMini() {
             <button className="seg-btn" data-on={side === "sell" ? "sell" : undefined} onClick={() => setSide("sell")}>Sell</button>
           </div>
           <div className="flex justify-between text-[12px] text-muted"><span>Reference</span><span className="num text-platinum">{fmtPrice(t?.last)}</span></div>
-          <Link href="/dex?market=ETH-USD" className="btn btn-line btn-xs mt-auto">Open terminal <span className="arr" aria-hidden="true">→</span></Link>
+          <Link href="/dex?market=SOL-USD" className="btn btn-line btn-xs mt-auto">Open terminal <span className="arr" aria-hidden="true">→</span></Link>
         </div>
       </div>
     </div>

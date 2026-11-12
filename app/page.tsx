@@ -60,10 +60,10 @@ export default function Home() {
         </div>
         <div className="border-t border-rule bg-obsidian">
           <dl className="wrap m-0 grid grid-cols-4 max-[640px]:grid-cols-2">
-            {[["Products", "03"], ["Total supply", "1,000,000"], ["Token", "$MILLION"], ["Launchpad", "Testnet live"]].map(([k, v], i) => (
+            {[["Products", "03"], ["Total supply", "1,000,000"], ["Token", "$MILLION"], ["Network", "Solana"]].map(([k, v], i) => (
               <div key={k} className={`px-6 py-5 ${i === 0 ? "pl-0" : ""} border-r border-rule last:border-r-0 max-[640px]:pl-0`}>
                 <dt className="label text-muted">{k}</dt>
-                <dd className="num m-0 mt-1.5 flex items-center gap-2 text-[15px] text-offwhite">{i === 3 && <span className="dot dot-live" />}{v}</dd>
+                <dd className="num m-0 mt-1.5 flex items-center gap-2 text-[15px] text-offwhite">{v}</dd>
               </div>
             ))}
           </dl>
@@ -94,7 +94,7 @@ export default function Home() {
               <div className="col-span-7 bg-offwhite px-12 py-10 max-[640px]:p-7">
                 <div className="flex items-center justify-between border-b border-[#dadde1] pb-4">
                   <div className="flex items-center gap-3"><span className="label">New token</span><span className="label text-ink-muted">Step 1 of 3 · Details</span></div>
-                  <span className="label rounded-sm border border-[#c9cdd2] px-2 py-[3px] text-ink-2">Testnet</span>
+                  <span className="label rounded-sm border border-[#c9cdd2] px-2 py-[3px] text-ink-2">Devnet</span>
                 </div>
                 <div className="mt-6 grid grid-cols-2 gap-4 max-[640px]:grid-cols-1" aria-hidden="true">
                   {[["Token name", "Northfield Collective"], ["Ticker", "NFC"], ["Total supply", "1,000,000"], ["Decimals", "18"]].map(([k, v]) => (
@@ -105,13 +105,13 @@ export default function Home() {
                 <div className="mt-6 rounded border border-[#dadde1] bg-white">
                   <div className="label border-b border-[#e3e6e9] px-4 py-3">Launch configuration</div>
                   <div className="grid grid-cols-3">
-                    {[["Network", "Base Sepolia"], ["Contract", "Fixed-supply ERC-20"], ["Signed by", "Your wallet"]].map(([k, v], i) => (
+                    {[["Network", "Solana"], ["Token", "SPL · fixed supply"], ["Signed by", "Your wallet"]].map(([k, v], i) => (
                       <div key={k} className={`px-4 py-3.5 ${i < 2 ? "border-r border-[#e3e6e9]" : ""}`}><div className="label text-ink-muted">{k}</div><div className="mt-1 text-[14px]">{v}</div></div>
                     ))}
                   </div>
                 </div>
                 <div className="sm-stack mt-6 flex items-center justify-between gap-4">
-                  <span className="text-[13px] text-ink-muted">Deploys from your wallet on supported testnets.</span>
+                  <span className="text-[13px] text-ink-muted">Launches from your Solana wallet. Mint authority revoked.</span>
                   <Link className="btn btn-ink btn-sm" href="/launchpad">Start a launch <span className="arr" aria-hidden="true">→</span></Link>
                 </div>
               </div>
@@ -135,9 +135,9 @@ export default function Home() {
                 <p className="mb-0 mt-6 text-[16px] leading-[26px] text-ink-2">Access perpetual market interfaces designed for active traders, with advanced position and risk-management workflows.</p>
               </div>
               <div className="rounded border border-[#d3d7dc] bg-white">
-                <div className="flex justify-between border-b border-[#e3e6e9] px-4 py-3"><span className="text-[14px] font-semibold">Risk calculator</span><span className="label text-ink-muted">Example</span></div>
+                <div className="flex justify-between border-b border-[#e3e6e9] px-4 py-3"><span className="text-[14px] font-semibold">SOL-PERP · Risk calculator</span><span className="label text-ink-muted">Example</span></div>
                 <div className="grid grid-cols-3">
-                  {[["Entry", "3,380.00"], ["Leverage", "5.0×"], ["Est. liq.", "2,720.90"]].map(([k, v], i) => (
+                  {[["Entry", "180.00"], ["Leverage", "5.0×"], ["Est. liq.", "144.90"]].map(([k, v], i) => (
                     <div key={k} className={`px-4 py-3 ${i < 2 ? "border-r border-[#e3e6e9]" : ""}`}><div className="label text-ink-muted">{k}</div><div className="num mt-1 text-[14px]">{v}</div></div>
                   ))}
                 </div>

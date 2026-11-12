@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useWallet } from "@/lib/wallet";
-import { chainLabel } from "@/lib/chains";
 import { shortAddr } from "@/lib/format";
 
 export function WalletButton({ className = "" }: { className?: string }) {
@@ -33,8 +32,8 @@ export function WalletButton({ className = "" }: { className?: string }) {
           <div className="px-3 py-2">
             <div className="label text-muted">Connected</div>
             <div className="num mt-1 break-all text-[12px] text-platinum">{w.address}</div>
-            <div className="label mt-3 text-muted">Network</div>
-            <div className="mt-1 text-[13px]">{chainLabel(w.chainId)}</div>
+            <div className="label mt-3 text-muted">Wallet</div>
+            <div className="mt-1 text-[13px]">{w.walletName} · Solana</div>
           </div>
           <button role="menuitem" className="row-btn mt-1 rounded px-3 py-2.5 text-[13px]"
             onClick={() => { navigator.clipboard?.writeText(w.address!).catch(() => {}); setOpen(false); }}>Copy address</button>

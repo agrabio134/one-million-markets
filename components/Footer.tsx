@@ -4,7 +4,7 @@ import { BrandMark } from "./BrandMark";
 export function RiskText({ className = "" }: { className?: string }) {
   return (
     <p className={`m-0 text-[13px] leading-[21px] text-muted ${className}`}>
-      Digital assets are highly volatile and may lose all of their value. Perpetual contracts and other leveraged products amplify both gains and losses and can result in rapid liquidation. Interacting with smart contracts carries technical risk, including bugs and exploits. Market prices shown in the app are reference data from a third-party public feed; One Million Markets order execution is not yet live. Launchpad deployments currently run on test networks only. Nothing on this site is investment, financial, legal or tax advice. Availability may be restricted in some jurisdictions.
+      Digital assets are highly volatile and may lose all of their value. Perpetual contracts and other leveraged products amplify both gains and losses and can result in rapid liquidation. Interacting with on-chain programs carries technical risk, including bugs and exploits. Market prices shown in the app are reference data from a third-party public feed; One Million Markets order execution is not yet live. Launchpad token creation runs on Solana Devnet unless mainnet is enabled, and launches are irreversible. Nothing on this site is investment, financial, legal or tax advice. Availability may be restricted in some jurisdictions.
     </p>
   );
 }

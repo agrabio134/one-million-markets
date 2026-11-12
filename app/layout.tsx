@@ -11,7 +11,7 @@ import { Footer } from "@/components/Footer";
 export const metadata: Metadata = {
   metadataBase: new URL("https://1m.markets"),
   title: { default: "One Million Markets — One Million. Every Market.", template: "%s · One Million Markets" },
-  description: "Launch tokens, trade decentralized assets, and access perpetual markets through one connected ecosystem. $MILLION — fixed supply of 1,000,000.",
+  description: "Launch tokens, trade decentralized assets, and access perpetual markets through one connected ecosystem on Solana. $MILLION — fixed supply of 1,000,000.",
   openGraph: {
     title: "One Million Markets",
     description: "One Million. Every Market. Launchpad, DEX and Perpetuals under one identity.",

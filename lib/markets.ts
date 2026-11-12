@@ -3,20 +3,20 @@
 export type MarketDef = { id: string; base: string; quote: string; name: string };
 
 export const MARKETS: MarketDef[] = [
+  { id: "SOL-USD", base: "SOL", quote: "USD", name: "Solana" },
+  { id: "JUP-USD", base: "JUP", quote: "USD", name: "Jupiter" },
+  { id: "BONK-USD", base: "BONK", quote: "USD", name: "Bonk" },
+  { id: "WIF-USD", base: "WIF", quote: "USD", name: "dogwifhat" },
+  { id: "JTO-USD", base: "JTO", quote: "USD", name: "Jito" },
+  { id: "PYTH-USD", base: "PYTH", quote: "USD", name: "Pyth Network" },
+  { id: "RENDER-USD", base: "RENDER", quote: "USD", name: "Render" },
+  { id: "HNT-USD", base: "HNT", quote: "USD", name: "Helium" },
   { id: "BTC-USD", base: "BTC", quote: "USD", name: "Bitcoin" },
   { id: "ETH-USD", base: "ETH", quote: "USD", name: "Ether" },
-  { id: "SOL-USD", base: "SOL", quote: "USD", name: "Solana" },
-  { id: "LINK-USD", base: "LINK", quote: "USD", name: "Chainlink" },
-  { id: "AVAX-USD", base: "AVAX", quote: "USD", name: "Avalanche" },
-  { id: "ARB-USD", base: "ARB", quote: "USD", name: "Arbitrum" },
-  { id: "OP-USD", base: "OP", quote: "USD", name: "Optimism" },
-  { id: "DOGE-USD", base: "DOGE", quote: "USD", name: "Dogecoin" },
-  { id: "UNI-USD", base: "UNI", quote: "USD", name: "Uniswap" },
-  { id: "AAVE-USD", base: "AAVE", quote: "USD", name: "Aave" },
 ];
 
 export const MARKET_IDS = new Set(MARKETS.map((m) => m.id));
-export const DEFAULT_MARKET = "ETH-USD";
+export const DEFAULT_MARKET = "SOL-USD";
 export const FEED_NAME = "Coinbase Exchange public market data";
 
 export function marketById(id?: string | null): MarketDef {
