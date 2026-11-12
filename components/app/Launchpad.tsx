@@ -1,15 +1,16 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { buildLaunchTx, U64_MAX } from "@/lib/spl";
 import { CLUSTERS, cluster, explorerUrl, solscanUrl, type ClusterKey } from "@/lib/solana";
 import { useWallet } from "@/lib/wallet";
 import { fmt, shortAddr } from "@/lib/format";
 import { IconExternal } from "../Icons";
+import { ImagePicker } from "./ImagePicker";
 
-type Form = { name: string; symbol: string; supply: string; decimals: string; uri: string; description: string; cluster: ClusterKey };
-type Launch = { mint: string; sig: string; cluster: ClusterKey; name: string; symbol: string; supply: string; decimals: number; at: number; description?: string };
-type Phase = { s: "idle" } | { s: "building" } | { s: "signing" } | { s: "pending"; sig: string } | { s: "done"; launch: Launch } | { s: "error"; msg: string };
+type Form = { name: string; symbol: string; supply: string; decimals: string; description: string; cluster: ClusterKey };
+type Launch = { mint: string; sig: string; cluster: ClusterKey; name: string; symbol: string; supply: string; decimals: number; at: number; description?: string; image?: string | null };
+type Phase = { s: "idle" } | { s: "uploading" } | { s: "building" } | { s: "signing" } | { s: "pending"; sig: string } | { s: "done"; launch: Launch } | { s: "error"; msg: string };
 
 const LS = "omm.sol.launches.v1";
 const STEPS = ["Details", "Network", "Review & launch"] as const;
@@ -27,8 +28,6 @@ function validate(f: Form) {
   if (!/^\d+$/.test(f.decimals) || d > 9) e.decimals = "0–9.";
   if (!/^\d+$/.test(f.supply) || BigInt(f.supply || "0") <= 0n) e.supply = "Whole number greater than zero.";
   else if (!e.decimals && BigInt(f.supply) * 10n ** BigInt(d) > U64_MAX) e.supply = "Too large for these decimals. Lower the supply or decimals.";
-  if (f.uri && !/^https:\/\/\S+$/.test(f.uri)) e.uri = "Must be an https:// URL.";
-  else if (bytes(f.uri) > 120) e.uri = "120 characters maximum.";
   if (f.description.length > 280) e.description = "280 characters maximum.";
   return e;
 }
@@ -47,7 +46,9 @@ export function Launchpad() {
   const w = useWallet();
   const [step, setStep] = useState(0);
   const [touched, setTouched] = useState(false);
-  const [f, setF] = useState<Form>({ name: "", symbol: "", supply: "1000000", decimals: "6", uri: "", description: "", cluster: "devnet" });
+  const [f, setF] = useState<Form>({ name: "", symbol: "", supply: "1000000", decimals: "6", description: "", cluster: "devnet" });
+  const [image, setImage] = useState<File | null>(null);
+  const uploaded = useRef<{ key: string; uri: string; image: string | null } | null>(null);
   const [phase, setPhase] = useState<Phase>({ s: "idle" });
   const [launches, setLaunches] = useState<Launch[]>([]);
   const [balance, setBalance] = useState<number | null>(null);
@@ -90,9 +91,25 @@ export function Launchpad() {
     if (!owner || !w.adapter.sendTransaction) return w.openPicker();
     if (!connection) return;
     try {
+      let uri = "", imageUrl: string | null = null;
+      if (image || f.description.trim()) {
+        const key = [f.name.trim(), f.symbol, f.description.trim(), image?.name, image?.size, image?.lastModified].join("|");
+        if (uploaded.current?.key === key) ({ uri, image: imageUrl } = uploaded.current);
+        else {
+          setPhase({ s: "uploading" });
+          const fd = new FormData();
+          fd.set("name", f.name.trim()); fd.set("symbol", f.symbol); fd.set("description", f.description.trim());
+          if (image) fd.set("image", image);
+          const res = await fetch("/api/token-metadata", { method: "POST", body: fd });
+          const j = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(j.error ?? "Image upload failed.");
+          uri = j.uri; imageUrl = j.image;
+          uploaded.current = { key, uri, image: imageUrl };
+        }
+      }
       setPhase({ s: "building" });
       const { tx, mint } = await buildLaunchTx(connection, owner, {
-        name: f.name.trim(), symbol: f.symbol, uri: f.uri.trim(), decimals: Number(f.decimals), supply: BigInt(f.supply),
+        name: f.name.trim(), symbol: f.symbol, uri, decimals: Number(f.decimals), supply: BigInt(f.supply),
       });
       const bh = await connection.getLatestBlockhash("confirmed");
       tx.recentBlockhash = bh.blockhash;
@@ -101,15 +118,15 @@ export function Launchpad() {
       setPhase({ s: "pending", sig });
       const res = await connection.confirmTransaction({ signature: sig, ...bh }, "confirmed");
       if (res.value.err) throw new Error("The launch transaction failed on-chain.");
-      const l: Launch = { mint: mint.publicKey.toBase58(), sig, cluster: f.cluster, name: f.name.trim(), symbol: f.symbol, supply: f.supply, decimals: Number(f.decimals), at: Date.now(), description: f.description || undefined };
+      const l: Launch = { mint: mint.publicKey.toBase58(), sig, cluster: f.cluster, name: f.name.trim(), symbol: f.symbol, supply: f.supply, decimals: Number(f.decimals), at: Date.now(), description: f.description || undefined, image: imageUrl };
       const next = [l, ...loadLaunches()].slice(0, 50);
       saveLaunches(next); setLaunches(next); setPhase({ s: "done", launch: l }); refreshBalance();
     } catch (e) { setPhase({ s: "error", msg: errMsg(e) }); }
   }
 
-  function reset() { setPhase({ s: "idle" }); setStep(0); setTouched(false); setF((s) => ({ ...s, name: "", symbol: "", uri: "", description: "" })); }
+  function reset() { setPhase({ s: "idle" }); setStep(0); setTouched(false); setF((s) => ({ ...s, name: "", symbol: "", description: "" })); setImage(null); uploaded.current = null; }
 
-  const busy = phase.s === "building" || phase.s === "signing" || phase.s === "pending";
+  const busy = phase.s === "uploading" || phase.s === "building" || phase.s === "signing" || phase.s === "pending";
   const networkOk = !!owner && !!c.rpc;
 
   return (
@@ -128,7 +145,10 @@ export function Launchpad() {
 
         {phase.s === "done" ? (
           <div className="p-8">
-            <div className="label text-up">Launched on {cluster(phase.launch.cluster).label}</div>
+            <div className="flex items-center gap-5">
+              {phase.launch.image && <img src={phase.launch.image} alt="" className="h-20 w-20 rounded-full border border-rule-2 object-cover" />}
+              <div className="label text-up">Launched on {cluster(phase.launch.cluster).label}</div>
+            </div>
             <h2 className="disp mt-4 text-[48px]">{phase.launch.name}<span className="text-steel"> · {phase.launch.symbol}</span></h2>
             <dl className="mt-8 grid gap-3 text-[14px]">
               <KV k="Mint address" v={<span className="num break-all">{phase.launch.mint}</span>} />
@@ -154,13 +174,11 @@ export function Launchpad() {
                 </Field>
                 <Field label="Decimals" err={showErr("decimals")} hint="6 is common for Solana launches; 9 matches SOL."><input className="field" inputMode="numeric" value={f.decimals} onChange={set("decimals")} aria-invalid={!!showErr("decimals")} /></Field>
                 <div className="col-span-full">
-                  <Field label="Metadata URI (optional)" err={showErr("uri")} hint="https link to a JSON file with your image and description, used by wallets and explorers.">
-                    <input className="field field-sans" value={f.uri} onChange={set("uri")} placeholder="https://…/token.json" aria-invalid={!!showErr("uri")} />
-                  </Field>
+                  <ImagePicker file={image} onChange={setImage} disabled={busy} />
                 </div>
                 <div className="col-span-full">
-                  <Field label="Notes (optional, stored in this browser only)" err={showErr("description")}>
-                    <textarea className="field field-sans" rows={2} value={f.description} onChange={set("description")} placeholder="What is this token for?" />
+                  <Field label="Description (optional, public)" err={showErr("description")} hint="Shown by wallets and explorers alongside the image.">
+                    <textarea className="field field-sans" rows={2} value={f.description} onChange={set("description")} placeholder="What is this token for?" maxLength={280} />
                   </Field>
                 </div>
               </div>
@@ -197,10 +215,12 @@ export function Launchpad() {
             {step === 2 && (
               <div className="grid gap-5">
                 <dl className="m-0 grid gap-3 rounded border border-rule-2 bg-well p-5 text-[14px]">
+                  <KV k="Image" v={image ? <Thumb file={image} /> : <span className="text-muted">None</span>} />
                   <KV k="Name" v={f.name} /><KV k="Ticker" v={<span className="num">{f.symbol}</span>} />
                   <KV k="Total supply" v={<span className="num">{fmt(Number(f.supply), 0)}</span>} /><KV k="Decimals" v={<span className="num">{f.decimals}</span>} />
                   <KV k="Network" v={c.label} /><KV k="Recipient of full supply" v={<span className="num">{w.address ? shortAddr(w.address) : "Connect wallet"}</span>} />
                   <KV k="Token program" v="Token-2022 · on-chain metadata" />
+                  {(image || f.description.trim()) && <KV k="Metadata file" v="Uploaded at launch (image + JSON)" />}
                   <KV k="Authorities" v="Mint revoked · no freeze · metadata updatable by you" />
                 </dl>
                 {c.real && <div className="rounded border border-[#5a4a2a] bg-[#1d1912] px-4 py-3 text-[13px] text-[#e6c88f]">This launch uses real SOL on mainnet and cannot be undone.</div>}
@@ -222,7 +242,7 @@ export function Launchpad() {
                   disabled={step === 1 && !networkOk}>Continue <span className="arr" aria-hidden="true">→</span></button>
               ) : (
                 <button className="btn btn-silver btn-sm" onClick={launch} disabled={busy || !detailsOk || !c.rpc}>
-                  {phase.s === "building" ? "Preparing…" : phase.s === "signing" ? "Approve in wallet…" : phase.s === "pending" ? "Confirming…" : !w.address ? "Connect wallet" : "Launch token"} <span className="arr" aria-hidden="true">→</span>
+                  {phase.s === "uploading" ? "Uploading image…" : phase.s === "building" ? "Preparing…" : phase.s === "signing" ? "Approve in wallet…" : phase.s === "pending" ? "Confirming…" : !w.address ? "Connect wallet" : "Launch token"} <span className="arr" aria-hidden="true">→</span>
                 </button>
               )}
             </div>
@@ -234,7 +254,7 @@ export function Launchpad() {
         <div className="panel p-6">
           <div className="label text-muted">How it works</div>
           <ol className="m-0 mt-4 grid list-none gap-4 p-0 text-[14px] leading-[22px] text-mist">
-            <li><span className="num text-platinum">01</span> Define the token: name, ticker, supply and decimals.</li>
+            <li><span className="num text-platinum">01</span> Define the token and upload its image.</li>
             <li><span className="num text-platinum">02</span> Connect a Solana wallet. On devnet you can request free test SOL.</li>
             <li><span className="num text-platinum">03</span> Approve one transaction. It creates the mint with on-chain metadata, sends the full supply to you and revokes minting forever.</li>
           </ol>
@@ -247,7 +267,7 @@ export function Launchpad() {
           ) : launches.map((l) => (
             <a key={l.mint} href={explorerUrl("address", l.mint, l.cluster)} target="_blank" rel="noreferrer"
               className="grid gap-1 border-b border-[#1e2227] px-5 py-3 text-[13px] no-underline transition-colors last:border-b-0 hover:bg-[#1e2227]">
-              <span className="flex justify-between"><span className="font-medium">{l.name}</span><span className="num text-mist">{l.symbol}</span></span>
+              <span className="flex items-center justify-between gap-3"><span className="flex items-center gap-2.5 font-medium">{l.image ? <img src={l.image} alt="" className="h-6 w-6 rounded-full object-cover" /> : <span className="h-6 w-6 rounded-full bg-carbon" />}{l.name}</span><span className="num text-mist">{l.symbol}</span></span>
               <span className="num flex justify-between text-[12px] text-muted"><span>{shortAddr(l.mint)}</span><span>{cluster(l.cluster).label}</span></span>
             </a>
           ))}
@@ -265,6 +285,11 @@ function Field({ label, err, hint, children }: { label: string; err?: string | f
       {err ? <span className="text-[12px] text-down">{err}</span> : hint ? <span className="text-[12px] text-muted">{hint}</span> : null}
     </label>
   );
+}
+function Thumb({ file }: { file: File }) {
+  const [u, setU] = useState<string | null>(null);
+  useEffect(() => { const x = URL.createObjectURL(file); setU(x); return () => URL.revokeObjectURL(x); }, [file]);
+  return u ? <img src={u} alt="" className="ml-auto h-10 w-10 rounded-full object-cover" /> : null;
 }
 function KV({ k, v }: { k: string; v: React.ReactNode }) {
   return <div className="flex justify-between gap-6"><dt className="text-muted">{k}</dt><dd className="m-0 text-right text-platinum">{v}</dd></div>;
