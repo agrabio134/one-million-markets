@@ -4,7 +4,6 @@ export type MarketDef = { id: string; base: string; quote: string; name: string 
 
 export const MARKETS: MarketDef[] = [
   { id: "SOL-USD", base: "SOL", quote: "USD", name: "Solana" },
-  { id: "JUP-USD", base: "JUP", quote: "USD", name: "Jupiter" },
   { id: "BONK-USD", base: "BONK", quote: "USD", name: "Bonk" },
   { id: "WIF-USD", base: "WIF", quote: "USD", name: "dogwifhat" },
   { id: "JTO-USD", base: "JTO", quote: "USD", name: "Jito" },
