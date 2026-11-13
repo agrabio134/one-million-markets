@@ -5,8 +5,8 @@ import { fmtPrice, fmtCompact } from "@/lib/format";
 
 const W = 1000, H = 320, PAD_T = 16, PAD_B = 28;
 
-export function PriceChart({ candles, loading, error, height = 320, compact = false }: {
-  candles: Candle[] | null; loading: boolean; error: string | null; height?: number; compact?: boolean;
+export function PriceChart({ candles, loading, error, height = 320, compact = false, candleMode = false }: {
+  candles: Candle[] | null; loading: boolean; error: string | null; height?: number; compact?: boolean; candleMode?: boolean;
 }) {
   const [hover, setHover] = useState<number | null>(null);
   const box = useRef<HTMLDivElement>(null);
@@ -60,7 +60,7 @@ export function PriceChart({ candles, loading, error, height = 320, compact = fa
           {!compact && candles.map((c, i) => (
             <rect key={`v${c.t}`} x={i * geo.step + geo.step * 0.2} width={geo.step * 0.6} y={H - (c.v / geo.vMax) * 40} height={(c.v / geo.vMax) * 40} fill="rgba(191,196,202,.08)" />
           ))}
-          {compact ? (
+          {compact && !candleMode ? (
             <path d={"M" + candles.map((c, i) => `${(i + 0.5) * geo.step} ${geo.y(c.c)}`).join(" L")} fill="none" stroke="#bfc4ca" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
           ) : candles.map((c, i) => {
             const up = c.c >= c.o, col = up ? "#9fd8b8" : "#f0a797", x = (i + 0.5) * geo.step;

@@ -17,7 +17,7 @@ export function WalletButton({ className = "" }: { className?: string }) {
 
   if (w.status !== "connected" || !w.address) {
     return (
-      <button className={`btn btn-silver btn-sm ${className}`} onClick={w.openPicker} disabled={w.status === "connecting"}>
+      <button className={`btn btn-metal btn-sm !h-11 ${className}`} onClick={w.openPicker} disabled={w.status === "connecting"}>
         {w.status === "connecting" ? "Connecting…" : "Connect wallet"}
       </button>
     );

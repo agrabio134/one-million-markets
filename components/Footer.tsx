@@ -14,11 +14,11 @@ export function Footer() {
     <footer className="border-t border-rule bg-obsidian text-platinum">
       <div className="wrap g12 gap-y-10 pb-12 pt-16">
         <div className="col-span-4 flex flex-col gap-5">
-          <div className="flex items-center gap-3"><BrandMark size={40} /><span className="font-display text-[16px] font-bold">ONE MILLION MARKETS</span></div>
+          <div className="flex items-center gap-3"><BrandMark size={40} /><span className="font-serif-brand text-[16px] font-semibold">ONE MILLION MARKETS</span></div>
           <a href="https://1m.markets" className="num self-start border-b border-[#3a3f46] pb-0.5 text-[14px] no-underline">1M.markets</a>
         </div>
         <FooterCol title="Products" links={[["Launchpad", "/launchpad"], ["DEX", "/dex"], ["Perpetuals", "/perpetuals"], ["Markets", "/markets"]]} />
-        <FooterCol title="Ecosystem" links={[["$MILLION token", "/#token"], ["Overview", "/#ecosystem"], ["Philosophy", "/#philosophy"]]} />
+        <FooterCol title="Ecosystem" links={[["$MILLION token", "/#token"], ["Overview", "/#ecosystem"], ["Platform", "/#markets"]]} />
         <div className="col-span-2"><div className="label mb-3 text-muted">Community</div>
           <div className="flex flex-col text-[14px] leading-8 text-muted"><span>[Official channel]</span><span>[Official channel]</span></div></div>
         <FooterCol title="Resources" links={[["Risk disclosure", "/risk"]]} extra={["[Documentation]", "[Terms]"]} />

@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "@fontsource-variable/inter-tight";
+import "@fontsource-variable/archivo/wdth.css";
+import "@fontsource/cinzel/600.css";
 import "./globals.css";
 import { WalletProvider } from "@/lib/wallet";
 import { SiteHeader } from "@/components/SiteHeader";

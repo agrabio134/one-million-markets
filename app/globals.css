@@ -169,3 +169,82 @@ select.field { appearance: none; background-image: linear-gradient(45deg, transp
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ───────────────────────── Silver identity (v2) ───────────────────────── */
+.font-wide { font-family: "Archivo Variable", var(--font-display); font-stretch: 125%; }
+.font-serif-brand { font-family: "Cinzel", Georgia, serif; }
+.metal-text {
+  background: linear-gradient(180deg, #ffffff 0%, #e6e9ec 30%, #9aa0a8 52%, #d8dce0 70%, #8c929a 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.metal-text-dark {
+  background: linear-gradient(180deg, #2a2e33 0%, #0b0d10 55%, #3a3f46 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.btn-metal {
+  background: linear-gradient(180deg, #fbfcfd 0%, #d9dde1 45%, #b7bcc2 55%, #e9ecef 100%);
+  color: #0b0d10; border: 1px solid rgba(255,255,255,.7);
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 -1px 0 rgba(0,0,0,.15) inset, 0 8px 24px rgba(0,0,0,.35);
+}
+.btn-metal:hover:not(:disabled) { background: linear-gradient(180deg, #ffffff 0%, #e8ebee 45%, #c9ced3 55%, #f4f6f8 100%); }
+.btn-ghost-metal { border: 1px solid rgba(231,233,236,.55); color: #f5f6f7; background: rgba(255,255,255,.02); }
+.btn-ghost-metal:hover:not(:disabled) { border-color: #fff; background: rgba(255,255,255,.06); }
+.btn-metal-sm {
+  background: linear-gradient(180deg, #f2f4f6 0%, #c9cdd2 50%, #e2e5e8 100%); color: #0b0d10;
+  border: 1px solid rgba(255,255,255,.6); box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
+}
+.btn-metal-sm:hover { background: linear-gradient(180deg, #fff 0%, #dadde1 50%, #eef0f2 100%); }
+
+.hero-v2 {
+  position: relative; overflow: hidden; background-color: #07080a;
+  background-image:
+    radial-gradient(ellipse 60% 70% at 62% 35%, rgba(200,205,212,.16), transparent 60%),
+    linear-gradient(112deg, transparent 38%, rgba(255,255,255,.045) 44%, transparent 47%, transparent 58%, rgba(255,255,255,.035) 62%, transparent 66%),
+    linear-gradient(180deg, #0c0e11 0%, #07080a 100%);
+}
+.hero-v2::after { /* angled steel plates */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 46%, rgba(255,255,255,.06) 46.2%, transparent 46.6%),
+    linear-gradient(115deg, transparent 0 71%, rgba(255,255,255,.05) 71.2%, transparent 71.6%);
+}
+.statue-fade {
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 55% 42%, #000 55%, transparent 78%);
+  mask-image: radial-gradient(ellipse 62% 70% at 55% 42%, #000 55%, transparent 78%);
+  mix-blend-mode: lighten;
+}
+.blend-lighten { mix-blend-mode: lighten; }
+.brushed {
+  background-color: #dfe2e6;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.18) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, #eef0f2 0%, #d5d9dd 55%, #c3c8ce 100%);
+}
+.hatch { background-image: repeating-linear-gradient(-55deg, #8c929a 0 5px, transparent 5px 13px); }
+.metal-card {
+  border: 1px solid transparent; border-radius: 10px;
+  background:
+    linear-gradient(160deg, #1b1e22 0%, #0d0f12 60%, #121418 100%) padding-box,
+    linear-gradient(135deg, #f1f3f5 0%, #6b7178 22%, #2c3035 50%, #aeb3ba 78%, #f5f6f7 100%) border-box;
+  box-shadow: 0 18px 40px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.08) inset;
+}
+.metal-inset {
+  border: 1px solid #2e3339; border-radius: 8px;
+  background: linear-gradient(180deg, #15181c 0%, #0b0d10 100%);
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset;
+}
+.mini-field {
+  height: 32px; width: 100%; border: 1px solid #2e3339; border-radius: 4px; background: #0b0d10;
+  color: #e7e9ec; font-size: 12px; padding: 0 10px; font-family: var(--font-sans);
+}
+.mini-field::placeholder { color: #6f757d; }
+.mini-field:focus { outline: none; border-color: #bfc4ca; }
+.btn-long { background: linear-gradient(180deg, #2fa866, #1d7d4a); color: #fff; border: 1px solid #4cc583; }
+.btn-short { background: linear-gradient(180deg, #d24a4a, #a12f2f); color: #fff; border: 1px solid #ea6b6b; }
+.btn-long:hover, .btn-short:hover { filter: brightness(1.1); }
+.side-plate { border: 1px solid rgba(231,233,236,.22); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)); }
+.strip-v2 {
+  background-color: #08090b;
+  background-image: radial-gradient(ellipse 40% 120% at 10% 50%, rgba(200,205,212,.1), transparent 70%), linear-gradient(180deg, #111318, #08090b);
+}
+.coin-mask { -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 58%, transparent 70%); mask-image: radial-gradient(circle at 50% 50%, #000 58%, transparent 70%); }

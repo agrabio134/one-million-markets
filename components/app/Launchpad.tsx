@@ -42,11 +42,11 @@ function errMsg(e: unknown) {
   return m || "Launch failed.";
 }
 
-export function Launchpad() {
+export function Launchpad({ initial }: { initial?: { name?: string; symbol?: string; supply?: string } }) {
   const w = useWallet();
   const [step, setStep] = useState(0);
   const [touched, setTouched] = useState(false);
-  const [f, setF] = useState<Form>({ name: "", symbol: "", supply: "1000000", decimals: "6", description: "", cluster: "devnet" });
+  const [f, setF] = useState<Form>({ name: (initial?.name ?? "").slice(0, 32), symbol: (initial?.symbol ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10), supply: (initial?.supply ?? "").replace(/[^0-9]/g, "") || "1000000", decimals: "6", description: "", cluster: "devnet" });
   const [image, setImage] = useState<File | null>(null);
   const uploaded = useRef<{ key: string; uri: string; image: string | null } | null>(null);
   const [phase, setPhase] = useState<Phase>({ s: "idle" });
