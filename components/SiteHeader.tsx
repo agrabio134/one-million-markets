@@ -29,12 +29,12 @@ export function SiteHeader() {
   return (
     <>
       <header className="fade sticky top-0 z-50 border-b border-[rgba(231,233,236,.1)] bg-[linear-gradient(180deg,#121418,#08090b)]">
-        <div className="wrap flex h-[84px] items-center justify-between gap-8">
+        <div className="wrap flex h-[66px] items-center justify-between gap-8">
           <Link href="/" aria-label="One Million Markets — home" className="flex items-center gap-3.5 text-offwhite no-underline">
-            <BrandMark size={46} />
+            <BrandMark size={42} />
             <span className="font-serif-brand text-[17px] font-semibold leading-[1.05] tracking-[0.02em]">ONE MILLION<br />MARKETS</span>
           </Link>
-          <nav aria-label="Primary" className="md-hide flex items-center gap-10">
+          <nav aria-label="Primary" className="md-hide flex items-center gap-12">
             <MarketsMenu active={path === "/markets"} />
             {NAV.slice(1).map((n) => (
               <Link key={n.href} href={n.href} className="navlink" aria-current={path === n.href ? "page" : undefined}>{n.label}</Link>
@@ -42,7 +42,7 @@ export function SiteHeader() {
           </nav>
           <div className="flex items-center gap-3">
             {inApp ? <WalletButton className="md-hide" /> : (
-              <Link href="/markets" className="btn btn-metal btn-sm md-hide !h-11 !px-6">Launch App <span className="arr" aria-hidden="true">↗</span></Link>
+              <Link href="/markets" className="btn btn-metal btn-sm md-hide !h-10 !px-6">Launch App <span className="arr" aria-hidden="true">↗</span></Link>
             )}
             <button className="btn btn-line btn-icon md-only" aria-label="Open menu" aria-expanded={open} onClick={() => setOpen(true)}><IconMenu /></button>
           </div>

@@ -234,7 +234,7 @@ select.field { appearance: none; background-image: linear-gradient(45deg, transp
   box-shadow: 0 1px 0 rgba(255,255,255,.05) inset;
 }
 .mini-field {
-  height: 32px; width: 100%; border: 1px solid #2e3339; border-radius: 4px; background: #0b0d10;
+  height: 28px; width: 100%; border: 1px solid #2e3339; border-radius: 4px; background: #0b0d10;
   color: #e7e9ec; font-size: 12px; padding: 0 10px; font-family: var(--font-sans);
 }
 .mini-field::placeholder { color: #6f757d; }
@@ -248,3 +248,20 @@ select.field { appearance: none; background-image: linear-gradient(45deg, transp
   background-image: radial-gradient(ellipse 40% 120% at 10% 50%, rgba(200,205,212,.1), transparent 70%), linear-gradient(180deg, #111318, #08090b);
 }
 .coin-mask { -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 58%, transparent 70%); mask-image: radial-gradient(circle at 50% 50%, #000 58%, transparent 70%); }
+.hero-metal {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f3f5 28%, #b9bec5 46%, #6f757d 54%, #c9cdd2 72%, #f4f5f7 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,.35));
+}
+.plate-tr {
+  clip-path: polygon(7% 0, 100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, rgba(120,126,134,.38) 0%, rgba(40,44,49,.25) 100%);
+  border-bottom: 1px solid rgba(231,233,236,.25);
+}
+.plate-bl {
+  clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
+  background: linear-gradient(0deg, rgba(150,156,164,.32) 0%, rgba(40,44,49,.12) 100%);
+}
+.beam { background: linear-gradient(105deg, transparent 0%, rgba(255,255,255,.07) 45%, transparent 70%); transform: skewX(-18deg); }
+.tilt { transform: perspective(900px) rotateY(-16deg) rotateX(3deg); transform-origin: left center; box-shadow: -18px 20px 30px rgba(0,0,0,.45), 0 0 0 1px rgba(231,233,236,.12); }
+@media (max-width: 1180px) { .tilt { transform: none; } }
