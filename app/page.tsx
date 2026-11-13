@@ -46,13 +46,17 @@ export default function Home() {
           </div>
 
           {/* Art: statue + coin */}
-          <div className="relative h-[330px] max-[960px]:order-first max-[960px]:-mt-4 max-[960px]:h-[330px]">
-            <Image src="/brand/statue.webp" alt="The official One Million Markets silver statue" width={1254} height={1254} priority
-              sizes="(max-width: 960px) 110vw, 760px"
-              className="statue-fade coin-in absolute left-[-20%] top-[-30%] w-[104%] max-w-none max-[960px]:left-[-6%] max-[960px]:top-[-8%] max-[960px]:w-[92%]" />
-            <Image src="/brand/coin.webp" alt="The official One Million Coin" width={800} height={800} priority
-              sizes="(max-width: 960px) 55vw, 380px"
-              className="coin-mask blend-lighten fade d2 absolute right-[-12%] top-[-4%] w-[60%] max-w-none max-[1180px]:right-[-4%] max-[960px]:right-[-4%] max-[960px]:top-[30%] max-[960px]:w-[50%]" />
+          <div className="relative h-[330px] max-[960px]:order-first max-[960px]:-mt-4 max-[960px]:h-[300px]">
+            <div className="art-stage absolute bottom-[-20px] left-[-38%] right-[-7%] top-[-20px] overflow-hidden max-[960px]:inset-x-[-20px] max-[960px]:bottom-0 max-[960px]:top-0">
+              <div className="statue-wrap absolute inset-0">
+                <Image src="/brand/statue.webp" alt="The official One Million Markets silver statue" width={1254} height={1254} priority
+                  sizes="(max-width: 960px) 120vw, 640px"
+                  className="statue-crop coin-in absolute left-[-6%] top-[-7%] h-[128%] w-auto max-w-none max-[960px]:left-[-14%] max-[960px]:h-[122%]" />
+              </div>
+              <Image src="/brand/coin.webp" alt="The official One Million Coin" width={800} height={800} priority
+                sizes="(max-width: 960px) 60vw, 380px"
+                className="coin-mask fade d2 absolute right-[-3%] top-[1%] h-[98%] w-auto max-w-none max-[960px]:right-[-8%] max-[960px]:top-[8%] max-[960px]:h-[84%]" />
+            </div>
           </div>
 
           {/* Side plate */}
